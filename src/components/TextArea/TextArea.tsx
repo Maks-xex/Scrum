@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { useAutosizeTextArea } from "../../Hooks/useAutosizeTextArea";
+import { useAutosizeTextArea } from "../../hooks/useAutosizeTextArea";
 
 interface TextAreaProps {
   className?: string;
