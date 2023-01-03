@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  background-color: rgb(255 255 255 / 84.2%);
+  border-radius: 0.5rem;
+}
+
+.form__addList {
+  text-transform: capitalize;
+  color: white;
+  background-color: black !important;
+  max-width: 300px;
+  padding: 5px 0;
+  margin-top: 10px;
+
+  &:active {
+    box-shadow: 3px 4px 2px 0 grey;
+  }
+
+  > span {
+    font-size: xx-large;
+  }
+}
+
+.form__input {
+  font-family: "Dancing Script", cursive;
+  font-size: 24px;
+  width: 200px;
+  border: 2px black solid;
+}

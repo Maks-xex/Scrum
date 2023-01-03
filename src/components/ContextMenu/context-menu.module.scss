@@ -1,0 +1,29 @@
+.back {
+  font-family: Arial, Helvetica, sans-serif;
+  position: absolute;
+  right: 0;
+  margin-top: 36px;
+  z-index: 5;
+  box-shadow: 1px 2px 4px 0 grey;
+  margin-right: 10px;
+  min-width: 120px;
+  text-align: center;
+  background-color: aliceblue;
+  padding: 0;
+}
+
+.contextMenu {
+  font-family: "Dancing Script", cursive;
+
+  > li {
+    &:not(:last-child) {
+      border-bottom: 1px solid black;
+    }
+
+    &:hover {
+      background-color: rgb(0 0 0 / 20%);
+    }
+
+    cursor: pointer;
+  }
+}
