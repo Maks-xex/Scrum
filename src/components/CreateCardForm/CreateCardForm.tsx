@@ -4,18 +4,25 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import { Button } from "../Button/Button";
 
+import { ICardBody } from "../../types";
+
 import classes from "./create-card-form.module.scss";
 
 interface CreateCardFormProps {
   onSubmit?: SubmitHandler<Inputs>;
+  className?: string;
+  addButton?: boolean;
 }
 
 export interface Inputs {
   title: string;
+  body: ICardBody;
 }
 
 export const CreateCardForm: React.FC<CreateCardFormProps> = ({
   onSubmit,
+  className,
+  addButton = true,
 }): JSX.Element => {
   const {
     register,
@@ -25,9 +32,7 @@ export const CreateCardForm: React.FC<CreateCardFormProps> = ({
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmitFormHandler: SubmitHandler<Inputs> = async (
-    data
-  ): Promise<void> => {
+  const onSubmitFormHandler: SubmitHandler<Inputs> = async (data): Promise<void> => {
     if (onSubmit !== undefined) {
       onSubmit(data);
     }
@@ -39,15 +44,20 @@ export const CreateCardForm: React.FC<CreateCardFormProps> = ({
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(onSubmitFormHandler)} className={classes.form}>
+    <form
+      onSubmit={handleSubmit(onSubmitFormHandler)}
+      className={`${className ?? ""} ${classes.form}`}
+    >
       <input
         {...register("title", { required: true })}
-        className={classes.form__input}
+        className={`${classes.form__input}`}
         style={errors.title && { outlineColor: "red", borderColor: "red" }}
       />
-      <Button type="submit" className={classes.form__addList}>
-        <span>add card</span>
-      </Button>
+      {addButton && (
+        <Button type="submit" className={classes.form__addList}>
+          <span>add card</span>
+        </Button>
+      )}
     </form>
   );
 };

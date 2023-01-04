@@ -7,7 +7,7 @@ import { createCard } from "../../api/create-card";
 
 import { Button } from "../../components/Button/Button";
 import { Handlers, Modal } from "../../components/Modal/Modal";
-import { CreateCardForm } from "../../components/CreateCardForm/CreateCardForm";
+import { CreateCardForm, Inputs } from "../../components/CreateCardForm/CreateCardForm";
 import { Card } from "../../components/Card/Card";
 
 import { ICard } from "../../types";
@@ -24,7 +24,7 @@ export const HomePage: React.FC = () => {
     void queryClient.invalidateQueries("cards");
   };
 
-  const onSubmitFormHandler = async (data: any): Promise<void> => {
+  const onSubmitFormHandler = async (data: Inputs): Promise<void> => {
     handleModal.current?.(false);
     await createCard(data);
     void queryClient.invalidateQueries("cards");
@@ -56,10 +56,7 @@ export const HomePage: React.FC = () => {
         <CreateCardForm onSubmit={onSubmitFormHandler} />
       </Modal>
       {cards && renderCards()}
-      <Button
-        onClick={() => handleModal.current?.(true)}
-        className={`${classes.button} w-[268px]`}
-      >
+      <Button onClick={() => handleModal.current?.(true)} className={`${classes.button} grow`}>
         Add List
       </Button>
     </main>
