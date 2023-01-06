@@ -1,18 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useQueryClient } from "react-query";
 
 import { createCardBody } from "../../api/create-card-body";
 
 import { TextArea } from "../TextArea/TextArea";
 import { Button } from "../Button/Button";
-import { ContextMenu, Handlers } from "../ContextMenu/ContextMenu";
+import { ContextMenu } from "../ContextMenu/ContextMenu";
 import { CreateCardForm, Inputs } from "../CreateCardForm/CreateCardForm";
 
 import { ICardBody } from "../../types";
 
 import classes from "./card.module.scss";
-
-type CardBody = Record<string, Omit<ICardBody, "id">>;
+import { storage, writeImageUrl } from "../../store/firebase-store";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { CardBody } from "../CardBody/CardBody";
+import { InputFile } from "../InputFile/InputFile";
 
 interface CardListProps {
   title: string;
@@ -23,9 +25,18 @@ interface CardListProps {
 
 export const Card: React.FC<CardListProps> = ({ title, body, id, onClick }) => {
   const queryClient = useQueryClient();
-  const handleContextMenu = useRef<Handlers["setIsOpen"]>();
-  const contextMenu = useRef<Handlers["isOpen"]>();
   const [isVissible, setIsVissible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleFile = (evt: React.ChangeEvent<HTMLInputElement>): void => {
+    if (!evt.target.files) return;
+    const file = evt.target.files[0];
+    const storageRef = ref(storage, `/img/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    void getDownloadURL(uploadTask.snapshot.ref).then((url) =>
+      writeImageUrl(url, file.name, id, queryClient)
+    );
+  };
 
   const createCardBodyHandler = async (data: Inputs): Promise<void> => {
     await createCardBody(data, id);
@@ -33,30 +44,18 @@ export const Card: React.FC<CardListProps> = ({ title, body, id, onClick }) => {
     setIsVissible(false);
   };
 
-  const renderCardBody = (): JSX.Element => {
-    const data: ICardBody[] = Object.entries(body as unknown as CardBody).map(([id, value]) => ({
-      id,
-      ...value,
-    }));
-    return (
-      <div className={classes.card__main}>
-        <ul>
-          {data.map((cardBody) => (
-            <li key={cardBody.id}>{cardBody.title}</li>
-          ))}
-        </ul>
-      </div>
-    );
-  };
-
   return (
     <div className={classes.card}>
       <div className={classes.card__header}>
         <h2 className="hidden">{title}</h2>
-        <TextArea defaultValue={title} className={classes.card__title} autoSize />
+        <TextArea
+          defaultValue={title}
+          className={classes.card__title}
+          autoSize
+        />
         <Button
           className={classes.card__configButon}
-          onClick={() => handleContextMenu.current?.(!contextMenu.current)}
+          onClick={() => setIsOpen((prev) => !prev)}
         >
           <>
             <span></span>
@@ -64,21 +63,19 @@ export const Card: React.FC<CardListProps> = ({ title, body, id, onClick }) => {
             <span></span>
           </>
         </Button>
-        <ContextMenu
-          handlers={({ setIsOpen, isOpen }) => {
-            handleContextMenu.current = setIsOpen;
-            contextMenu.current = isOpen;
-          }}
-        >
+        <ContextMenu isOpen={isOpen}>
           <>
             <li onClick={() => onClick(id)}>delete</li>
             <li>Set</li>
           </>
         </ContextMenu>
       </div>
-      {body && renderCardBody()}
+      <CardBody body={body} />
       <div className={classes.card__footer}>
-        <Button className={classes.cardFooter__addCard} onClick={() => setIsVissible(true)}>
+        <Button
+          className={classes.cardFooter__addCard}
+          onClick={() => setIsVissible(true)}
+        >
           <>
             <span className="mr-2 text-3xl">+</span>Add card
           </>
@@ -90,12 +87,15 @@ export const Card: React.FC<CardListProps> = ({ title, body, id, onClick }) => {
             onSubmit={createCardBodyHandler}
           />
         )}
-        <Button
-          className={classes.cardFooter__addFile}
-          onClick={(evt) => console.log(evt.currentTarget)}
+        <InputFile
+          id="image"
+          classNameLabel={classes.cardFooter__addFile}
+          classNameInput="hidden cursor-pointer"
+          accept="image/*"
+          onChange={handleFile}
         >
-          <i className="fal fa-image text-[#4E4E4E] hover:text-[#2148d9]"></i>
-        </Button>
+          <i className="fal fa-image text-[#4E4E4E] hover:text-[#2148d9] cursor-pointer"></i>
+        </InputFile>
       </div>
     </div>
   );

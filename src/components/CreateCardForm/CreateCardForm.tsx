@@ -17,6 +17,7 @@ interface CreateCardFormProps {
 export interface Inputs {
   title: string;
   body: ICardBody;
+  img?: string;
 }
 
 export const CreateCardForm: React.FC<CreateCardFormProps> = ({
@@ -32,7 +33,9 @@ export const CreateCardForm: React.FC<CreateCardFormProps> = ({
     formState: { errors },
   } = useForm<Inputs>();
 
-  const onSubmitFormHandler: SubmitHandler<Inputs> = async (data): Promise<void> => {
+  const onSubmitFormHandler: SubmitHandler<Inputs> = async (
+    data
+  ): Promise<void> => {
     if (onSubmit !== undefined) {
       onSubmit(data);
     }
