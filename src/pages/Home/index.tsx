@@ -2,16 +2,15 @@ import React, { useRef } from "react";
 import { useQuery, useQueryClient } from "react-query";
 
 import { getCards } from "../../api/get-cards";
-import { deleteCard } from "../../api/delete-card";
 import { createCard } from "../../api/create-card";
 
 import { Button } from "../../components/Button/Button";
 import { Handlers, Modal } from "../../components/Modal/Modal";
+import { Card } from "../../components/Card/Card";
 import {
   CreateCardForm,
   Inputs,
 } from "../../components/CreateCardForm/CreateCardForm";
-import { Card } from "../../components/Card/Card";
 
 import { ICard } from "../../types";
 
@@ -22,34 +21,19 @@ export const HomePage: React.FC = () => {
   const handleModal = useRef<Handlers["setIsOpen"]>();
   const { data: cards = [] } = useQuery<ICard[]>("cards", getCards);
 
-  // const { data: img } = useQuery("img", getImg);
-
-  const onDeleteCardHandler = async (id: string): Promise<void> => {
-    await deleteCard(id);
-    void queryClient.invalidateQueries("cards");
-  };
-
   const onSubmitFormHandler = async (data: Inputs): Promise<void> => {
     handleModal.current?.(false);
     await createCard(data);
     void queryClient.invalidateQueries("cards");
   };
 
-  const renderCards = (): JSX.Element => {
-    return (
-      <>
-        {cards.map((card) => (
-          <Card
-            key={card.id}
-            title={card.title}
-            id={card.id}
-            body={card.body}
-            onClick={onDeleteCardHandler}
-          />
-        ))}
-      </>
-    );
-  };
+  const renderCards = (): JSX.Element => (
+    <>
+      {cards.map((card) => (
+        <Card key={card.id} title={card.title} id={card.id} body={card.body} />
+      ))}
+    </>
+  );
 
   return (
     <main className="mt-[50px] max-w-[60%] m-auto flex flex-wrap flex-row gap-4">
@@ -63,7 +47,7 @@ export const HomePage: React.FC = () => {
       {cards && renderCards()}
       <Button
         onClick={() => handleModal.current?.(true)}
-        className={`${classes.button} grow`}
+        className={`${classes.button} min-w-[300px]`}
       >
         Add List
       </Button>

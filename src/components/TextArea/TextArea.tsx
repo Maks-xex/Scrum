@@ -4,7 +4,7 @@ import { useAutosizeTextArea } from "../../hooks/useAutosizeTextArea";
 interface TextAreaProps {
   className?: string;
   maxLength?: number;
-  defaultValue?: string;
+  defaultValue: string;
   autoSize?: boolean;
 }
 
@@ -14,10 +14,12 @@ export const TextArea: React.FC<TextAreaProps> = ({
   autoSize,
   defaultValue,
 }) => {
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>(defaultValue);
   const ref = useRef<HTMLTextAreaElement>(null);
 
-  const onChangeHandler = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
+  const onChangeHandler = (
+    evt: React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
     setValue(evt.target.value);
   };
 
@@ -27,10 +29,10 @@ export const TextArea: React.FC<TextAreaProps> = ({
     <textarea
       className={className}
       maxLength={maxLength ?? 512}
-      aria-label={value.length === 0 ? defaultValue : value}
+      aria-label="title card"
       ref={ref}
       rows={1}
-      value={value.length === 0 ? defaultValue : value}
+      value={value}
       onChange={onChangeHandler}
     ></textarea>
   );

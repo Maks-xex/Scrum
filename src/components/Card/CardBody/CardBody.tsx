@@ -1,5 +1,5 @@
 import React from "react";
-import { ICardBody } from "../../types";
+import { ICardBody } from "../../../types";
 
 import classes from "./card-body.module.scss";
 
