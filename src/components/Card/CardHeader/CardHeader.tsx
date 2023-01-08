@@ -18,11 +18,11 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   onClick,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const myRefButton = useRef(null);
-  const myRefLi = useRef(null);
+  const btnRef = useRef(null);
+  const liRef = useRef(null);
 
   const handleClickOutside = (evt: MouseEvent): void => {
-    if (evt.target !== myRefButton.current && evt.target !== myRefLi.current)
+    if (evt.target !== btnRef.current && evt.target !== liRef.current)
       setIsOpen(false);
   };
 
@@ -40,7 +40,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
       <Button
         className={classes.card__configButon}
         onClick={() => setIsOpen((prev) => !prev)}
-        myRef={myRefButton}
+        ref={btnRef}
       >
         <>
           <span></span>
@@ -50,7 +50,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
       </Button>
       <ContextMenu isOpen={isOpen}>
         <>
-          <li ref={myRefLi} onClick={() => onClick(id)}>
+          <li ref={liRef} onClick={() => onClick(id)}>
             delete
           </li>
           <li>Set</li>
