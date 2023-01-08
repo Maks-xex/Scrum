@@ -7,5 +7,7 @@ export const getCards = async (): Promise<ICard[]> => {
   const response = await fetch(`${API_URL}/cardList.json`);
   const data = (await response.json()) as Response;
 
-  return data && Object.entries(data).map(([id, values]) => ({ id, ...values }))
+  return (
+    data && Object.entries(data).map(([id, values]) => ({ id, ...values }))
+  );
 };

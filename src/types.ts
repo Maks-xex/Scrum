@@ -1,7 +1,7 @@
 // export type bodyC = Record<string, Omit<ICardBody, "id">>;
 
 export interface ICardBody {
-  id: string
+  id: string;
   title: string;
   img?: string;
 }
