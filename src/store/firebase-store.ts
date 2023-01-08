@@ -18,11 +18,14 @@ const firebaseConfig = {
   messagingSenderId: "371344012966",
   appId: "1:371344012966:web:8de6ac6b29e27e870ca667",
 };
+export const API_URL = firebaseConfig.databaseURL;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const storage = getStorage(app);
 const database = getDatabase(app);
+
+export const storage = getStorage(app);
+
 export const writeImageUrl = (
   img: string,
   name: string,

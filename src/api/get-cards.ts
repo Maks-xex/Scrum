@@ -1,5 +1,5 @@
 import { ICard } from "../types";
-import { API_URL } from "./constants";
+import { API_URL } from "../store/firebase-store";
 
 type Response = Record<string, Omit<ICard, "id">>;
 

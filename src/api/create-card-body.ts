@@ -1,5 +1,5 @@
 import { Inputs } from "../components/CreateCardForm/CreateCardForm";
-import { API_URL } from "./constants";
+import { API_URL } from "../store/firebase-store";
 
 export const createCardBody = async (
   data: Inputs,
