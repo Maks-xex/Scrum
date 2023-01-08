@@ -6,23 +6,21 @@ interface ButtonProps {
   onClick?: React.MouseEventHandler;
   type?: "button" | "submit" | "reset";
   className?: string;
-  myRef?: React.RefObject<HTMLButtonElement>;
 }
-export const Button: React.FC<ButtonProps> = ({
-  children,
-  onClick,
-  type,
-  className,
-  myRef,
-}) => {
-  return (
-    <button
-      type={type ?? "button"}
-      className={`${classes.button} ${className ?? ""}`}
-      onClick={onClick}
-      ref={myRef}
-    >
-      {children}
-    </button>
-  );
-};
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, onClick, type, className }, ref): JSX.Element => {
+    return (
+      <button
+        type={type ?? "button"}
+        className={`${classes.button} ${className ?? ""}`}
+        onClick={onClick}
+        ref={ref}
+      >
+        {children}
+      </button>
+    );
+  }
+);
+
+Button.displayName = "Button";
