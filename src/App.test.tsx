@@ -1,11 +1,21 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import { App } from "./App";
-import { BrowserRouter } from "react-router-dom";
 import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter } from "react-router-dom";
+
+const queryClient = new QueryClient();
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <BrowserRouter>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  </BrowserRouter>
+);
 
 test("full app rendering/navigating", async () => {
-  render(<App />, { wrapper: BrowserRouter });
+  render(<App />, { wrapper });
 
   expect(screen.getByText(/Home/)).toBeInTheDocument();
   expect(screen.getByText(/About/)).toBeInTheDocument();
