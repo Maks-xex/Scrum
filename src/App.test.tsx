@@ -7,8 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 
 const queryClient = new QueryClient();
 
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const wrapper = ({ children }: { children: ReactNode }) => (
+const wrapper = ({ children }: { children: ReactNode }): JSX.Element => (
   <BrowserRouter>
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   </BrowserRouter>
