@@ -12,5 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: npm ci
-      - run: make check-lint
-      - run: make check-format
+      - run: npm lint:check
+      - run: npm format:check
+      - run: npm stylelint:check
