@@ -1,10 +1,11 @@
 import { ICard } from "../types";
-import { API_URL } from "../store/firebase-store";
+import { DATABASE_URL } from "../store/firebase-store";
 
 type Response = Record<string, Omit<ICard, "id">>;
 
 export const getCards = async (): Promise<ICard[]> => {
-  const response = await fetch(`${API_URL}/cardList.json`);
+  if (!DATABASE_URL) return [];
+  const response = await fetch(`${DATABASE_URL}/cardList.json`);
   const data = (await response.json()) as Response;
 
   return (

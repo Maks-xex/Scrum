@@ -1,7 +1,8 @@
-import { API_URL } from "../store/firebase-store";
+import { DATABASE_URL } from "../store/firebase-store";
 
 export const deleteCard = async (id: string): Promise<void> => {
-  await fetch(`${API_URL}/cardList/${id}.json`, {
+  if (!DATABASE_URL) return;
+  await fetch(`${DATABASE_URL}/cardList/${id}.json`, {
     method: "DELETE",
   });
 };

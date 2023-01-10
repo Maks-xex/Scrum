@@ -1,5 +1,4 @@
 // Import the functions you need from the SDKs you need
-
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
 import { getDatabase, push, ref, set } from "firebase/database";
@@ -9,16 +8,15 @@ import { QueryClient } from "react-query";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC_6y-QkpGxF0adD5d4WhD0mTJO_93hNdQ",
-  authDomain: "scrum-39f93.firebaseapp.com",
-  databaseURL:
-    "https://scrum-39f93-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "scrum-39f93",
-  storageBucket: "scrum-39f93.appspot.com",
-  messagingSenderId: "371344012966",
-  appId: "1:371344012966:web:8de6ac6b29e27e870ca667",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
-export const API_URL = firebaseConfig.databaseURL;
+export const DATABASE_URL = firebaseConfig.databaseURL;
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
