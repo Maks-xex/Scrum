@@ -5,22 +5,24 @@ import { Button } from "../../Button/Button";
 import { ContextMenu } from "../../ContextMenu/ContextMenu";
 
 import classes from "./card-header.module.scss";
+import { deleteCard } from "../../../api/delete-card";
+import { useQueryClient } from "react-query";
 
 interface CardHeaderProps {
   title: string;
   id: string;
-  onClick: Function;
 }
 
-export const CardHeader: React.FC<CardHeaderProps> = ({
-  title,
-  id,
-  onClick,
-}) => {
+export const CardHeader: React.FC<CardHeaderProps> = ({ title, id }) => {
   const [isOpen, setIsOpen] = useState(false);
   const btnRef = useRef(null);
   const liRef = useRef(null);
 
+  const queryClient = useQueryClient();
+  const onDeleteCardHandler = async (id: string): Promise<void> => {
+    await deleteCard(id);
+    void queryClient.invalidateQueries("cards");
+  };
   const handleClickOutside = (evt: MouseEvent): void => {
     if (evt.target !== btnRef.current && evt.target !== liRef.current)
       setIsOpen(false);
@@ -50,7 +52,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
       </Button>
       <ContextMenu isOpen={isOpen}>
         <>
-          <li ref={liRef} onClick={() => onClick(id)}>
+          <li ref={liRef} onClick={async () => await onDeleteCardHandler(id)}>
             delete
           </li>
           <li>Set</li>

@@ -1,10 +1,12 @@
-h2 {
+h2,
+h3 {
   word-wrap: break-word;
-  width: 250px;
+  width: 270px;
 }
 
 .card {
   display: flex;
+  align-self: flex-start;
   position: relative;
   flex-flow: column nowrap;
   justify-content: space-between;

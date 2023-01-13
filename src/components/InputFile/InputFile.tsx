@@ -1,8 +1,8 @@
 import React from "react";
 
 interface InputProps {
+  id: string;
   name?: string;
-  id?: string;
   classNameInput: string;
   classNameLabel: string;
   onChange: React.ChangeEventHandler<HTMLInputElement>;
@@ -11,8 +11,8 @@ interface InputProps {
 }
 
 export const InputFile: React.FC<InputProps> = ({
-  name,
   id,
+  name,
   classNameInput,
   classNameLabel,
   onChange,
@@ -21,12 +21,12 @@ export const InputFile: React.FC<InputProps> = ({
 }) => {
   return (
     <>
-      <label htmlFor={id} className={classNameLabel}>
+      <label htmlFor={`image-${id}`} className={classNameLabel}>
         {children}
       </label>
       <input
         type="file"
-        id={id}
+        id={`image-${id}`}
         name={name}
         accept={accept}
         className={classNameInput}

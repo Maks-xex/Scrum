@@ -30,6 +30,7 @@ export const CardFooter: React.FC<CardFooterProps> = ({ id }) => {
     const file = evt.target.files[0];
     const storageRef = ref(storage, `/img/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
+
     void getDownloadURL(uploadTask.snapshot.ref).then((url) =>
       writeImageUrl(url, file.name, id, queryClient)
     );
@@ -53,7 +54,7 @@ export const CardFooter: React.FC<CardFooterProps> = ({ id }) => {
         />
       )}
       <InputFile
-        id="image"
+        id={id}
         classNameLabel={classes.cardFooter__addFile}
         classNameInput="hidden cursor-pointer"
         accept="image/*"

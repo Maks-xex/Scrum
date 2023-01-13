@@ -7,8 +7,6 @@ import { ICardBody } from "../../types";
 
 import classes from "./card.module.scss";
 import { CardHeader } from "./CardHeader/CardHeader";
-import { useQueryClient } from "react-query";
-import { deleteCard } from "../../api/delete-card";
 
 interface CardListProps {
   title: string;
@@ -17,14 +15,9 @@ interface CardListProps {
 }
 
 export const Card: React.FC<CardListProps> = ({ title, body, id }) => {
-  const queryClient = useQueryClient();
-  const onDeleteCardHandler = async (id: string): Promise<void> => {
-    await deleteCard(id);
-    void queryClient.invalidateQueries("cards");
-  };
   return (
     <div className={classes.card}>
-      <CardHeader title={title} id={id} onClick={onDeleteCardHandler} />
+      <CardHeader title={title} id={id} />
       <CardBody body={body} />
       <CardFooter id={id} />
     </div>
