@@ -29,11 +29,11 @@ export const CardFooter: React.FC<CardFooterProps> = ({ id }) => {
     if (!evt.target.files) return;
     const file = evt.target.files[0];
     const storageRef = ref(storage, `/img/${file.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
-
-    void getDownloadURL(uploadTask.snapshot.ref).then((url) =>
-      writeImageUrl(url, file.name, id, queryClient)
-    );
+    void uploadBytesResumable(storageRef, file).then((snap) => {
+      void getDownloadURL(snap.ref).then((url) =>
+        writeImageUrl(url, file.name, id, queryClient)
+      );
+    });
   };
 
   return (

@@ -66,7 +66,7 @@ export const HomePage: React.FC = () => {
     list: ICard[],
     startIndex: number,
     endIndex: number
-  ): any => {
+  ): ICard[] => {
     const arr = Array.from(list);
     const [removed] = arr.splice(startIndex, 1);
     arr.splice(endIndex, 0, removed);
@@ -75,7 +75,7 @@ export const HomePage: React.FC = () => {
     return result;
   };
 
-  const onDragEnd = (result: DropResult, cards: any): void => {
+  const onDragEnd = (result: DropResult, cards: ICard[]): void => {
     if (!result.destination) {
       return;
     }
