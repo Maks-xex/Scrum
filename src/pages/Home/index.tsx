@@ -1,13 +1,13 @@
 import React, { useRef, useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
 
+import { useQuery, useQueryClient } from "react-query";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 import { getCards } from "../../api/get-cards";
 import { createCard } from "../../api/create-card";
 import { updateCard } from "../../api/update-card";
 
-import { StrictModeDroppable } from "../../components/StrictModeDroppable/StrictModeDroppable";
 import { Loader } from "../../components/Loader/Loader";
 import { Button } from "../../components/Button/Button";
 import { Handlers, Modal } from "../../components/Modal/Modal";
@@ -16,6 +16,7 @@ import {
   CreateCardForm,
   Inputs,
 } from "../../components/CreateCardForm/CreateCardForm";
+import { StrictModeDroppable } from "../../components/StrictModeDroppable/StrictModeDroppable";
 
 import { ICard } from "../../types";
 
@@ -93,34 +94,42 @@ export const HomePage: React.FC = () => {
       {isLoading ? (
         <Loader />
       ) : (
-        <main className="mt-[70px] mx-[20px] flex flex-nowrap flex-row">
-          <DragDropContext onDragEnd={(result) => onDragEnd(result, cards)}>
-            <StrictModeDroppable droppableId="cardList" direction="horizontal">
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  className="flex gap-4 mx-[20px]"
-                >
-                  <Modal
-                    handlers={({ setIsOpen }) => {
-                      handleModal.current = setIsOpen;
-                    }}
-                  >
-                    <CreateCardForm onSubmit={onSubmitFormHandler} />
-                  </Modal>
-                  {cards && renderCards()}
-                  {provided.placeholder}
-                </div>
-              )}
-            </StrictModeDroppable>
-          </DragDropContext>
-          <Button
-            onClick={() => handleModal.current?.(true)}
-            className={`${classes.button} min-w-[300px]`}
+        <main className="pt-[70px] px-[20px] flex flex-nowrap flex-row">
+          <ScrollContainer
+            className="flex overflow-x-auto"
+            ignoreElements="div[role=button]"
           >
-            Add List
-          </Button>
+            <DragDropContext onDragEnd={(result) => onDragEnd(result, cards)}>
+              <StrictModeDroppable
+                droppableId="cardList"
+                direction="horizontal"
+              >
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+                    className="flex gap-4 mx-[20px]"
+                  >
+                    {cards && renderCards()}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </StrictModeDroppable>
+            </DragDropContext>
+            <Button
+              onClick={() => handleModal.current?.(true)}
+              className={`${classes.button} min-w-[300px]`}
+            >
+              Add List
+            </Button>
+          </ScrollContainer>
+          <Modal
+            handlers={({ setIsOpen }) => {
+              handleModal.current = setIsOpen;
+            }}
+          >
+            <CreateCardForm onSubmit={onSubmitFormHandler} />
+          </Modal>
         </main>
       )}
     </>
