@@ -1,9 +1,14 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
+
+import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 
 import { getCards } from "../../api/get-cards";
 import { createCard } from "../../api/create-card";
+import { updateCard } from "../../api/update-card";
 
+import { StrictModeDroppable } from "../../components/StrictModeDroppable/StrictModeDroppable";
+import { Loader } from "../../components/Loader/Loader";
 import { Button } from "../../components/Button/Button";
 import { Handlers, Modal } from "../../components/Modal/Modal";
 import { Card } from "../../components/Card/Card";
@@ -19,7 +24,16 @@ import classes from "./index.module.scss";
 export const HomePage: React.FC = () => {
   const queryClient = useQueryClient();
   const handleModal = useRef<Handlers["setIsOpen"]>();
-  const { data: cards = [] } = useQuery<ICard[]>("cards", getCards);
+  const [cards, setCards] = useState<ICard[]>([]);
+
+  const { isLoading } = useQuery<ICard[]>("cards", getCards, {
+    onSuccess(data) {
+      setCards(data);
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
 
   const onSubmitFormHandler = async (data: Inputs): Promise<void> => {
     handleModal.current?.(false);
@@ -29,28 +43,86 @@ export const HomePage: React.FC = () => {
 
   const renderCards = (): JSX.Element => (
     <>
-      {cards.map((card) => (
-        <Card key={card.id} title={card.title} id={card.id} body={card.body} />
-      ))}
+      {cards
+        .sort((a, b) => a.order - b.order)
+        .map((card, i) => (
+          <Draggable draggableId={card.id} index={i} key={card.id}>
+            {(provide) => (
+              <div
+                className="h-fit"
+                ref={provide.innerRef}
+                {...provide.dragHandleProps}
+                {...provide.draggableProps}
+              >
+                <Card title={card.title} id={card.id} body={card.body} />
+              </div>
+            )}
+          </Draggable>
+        ))}
     </>
   );
 
+  const reorder = (
+    list: ICard[],
+    startIndex: number,
+    endIndex: number
+  ): any => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    const res = result.map((card, i) => ({ ...card, order: i }));
+
+    return res;
+  };
+
+  const onDragEnd = (result: DropResult, cards: any): void => {
+    if (!result.destination) {
+      return;
+    }
+
+    if (result.destination.index === result.source.index) {
+      return;
+    }
+    const card = reorder(cards, result.source.index, result.destination.index);
+    setCards(card);
+    void updateCard(card);
+  };
+
   return (
-    <main className="mt-[50px] max-w-[60%] m-auto flex flex-wrap flex-row gap-4">
-      <Modal
-        handlers={({ setIsOpen }) => {
-          handleModal.current = setIsOpen;
-        }}
-      >
-        <CreateCardForm onSubmit={onSubmitFormHandler} />
-      </Modal>
-      {cards && renderCards()}
-      <Button
-        onClick={() => handleModal.current?.(true)}
-        className={`${classes.button} min-w-[300px]`}
-      >
-        Add List
-      </Button>
-    </main>
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <main className="mt-[70px] mx-[20px] flex flex-nowrap flex-row">
+          <DragDropContext onDragEnd={(result) => onDragEnd(result, cards)}>
+            <StrictModeDroppable droppableId="cardList" direction="horizontal">
+              {(provided) => (
+                <div
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  className="flex gap-4 mx-[20px]"
+                >
+                  <Modal
+                    handlers={({ setIsOpen }) => {
+                      handleModal.current = setIsOpen;
+                    }}
+                  >
+                    <CreateCardForm onSubmit={onSubmitFormHandler} />
+                  </Modal>
+                  {cards && renderCards()}
+                  {provided.placeholder}
+                </div>
+              )}
+            </StrictModeDroppable>
+          </DragDropContext>
+          <Button
+            onClick={() => handleModal.current?.(true)}
+            className={`${classes.button} min-w-[300px]`}
+          >
+            Add List
+          </Button>
+        </main>
+      )}
+    </>
   );
 };
