@@ -67,12 +67,12 @@ export const HomePage: React.FC = () => {
     startIndex: number,
     endIndex: number
   ): any => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    const res = result.map((card, i) => ({ ...card, order: i }));
+    const arr = Array.from(list);
+    const [removed] = arr.splice(startIndex, 1);
+    arr.splice(endIndex, 0, removed);
+    const result = arr.map((card, i) => ({ ...card, order: i }));
 
-    return res;
+    return result;
   };
 
   const onDragEnd = (result: DropResult, cards: any): void => {
