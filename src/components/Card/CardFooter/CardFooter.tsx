@@ -37,7 +37,10 @@ export const CardFooter: React.FC<CardFooterProps> = ({ id }) => {
   };
 
   return (
-    <div className={classes.card__footer}>
+    <div
+      className={classes.card__footer}
+      onKeyDown={(e) => e.key === "Escape" && setIsVissible(false)}
+    >
       <Button
         className={classes.cardFooter__addCard}
         onClick={() => setIsVissible(true)}

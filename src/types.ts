@@ -10,4 +10,5 @@ export interface ICard {
   id: string;
   title: string;
   body?: ICardBody[];
+  order: number;
 }
