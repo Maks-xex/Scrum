@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const Navigation: React.FC = () => (
-  <nav className="flex justify-end w-full relative top-0 mb-2 p-2 bg-blue-500 rounded-b shadow-md">
+  <nav className="flex justify-end w-full fixed top-0 p-2 bg-blue-500 rounded-b shadow-md z-10">
     <h1 className="font-extrabold text-blue-600 drop-shadow-md shadow-blue-600/50 uppercase">
       <a href="/">
         <img src="" width="100px" />
