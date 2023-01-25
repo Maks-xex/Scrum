@@ -4,8 +4,9 @@ import { useAutosizeTextArea } from "../../hooks/useAutosizeTextArea";
 interface TextAreaProps {
   className?: string;
   maxLength?: number;
-  defaultValue: string;
+  defaultValue?: string;
   autoSize?: boolean;
+  onKeyPress?: React.KeyboardEventHandler<HTMLTextAreaElement>;
 }
 
 export const TextArea: React.FC<TextAreaProps> = ({
@@ -13,8 +14,10 @@ export const TextArea: React.FC<TextAreaProps> = ({
   maxLength,
   autoSize,
   defaultValue,
+  onKeyPress,
 }) => {
-  const [value, setValue] = useState<string>(defaultValue);
+  const [value, setValue] = useState<string>(defaultValue ?? "");
+  const [height, setHeight] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
 
   const onChangeHandler = (
@@ -27,13 +30,22 @@ export const TextArea: React.FC<TextAreaProps> = ({
 
   return (
     <textarea
+      style={{ height }}
       className={className}
       maxLength={maxLength ?? 512}
-      aria-label="title card"
       ref={ref}
       rows={1}
       value={value}
       onChange={onChangeHandler}
+      autoFocus
+      onFocus={(e) => {
+        e.currentTarget.setSelectionRange(
+          e.currentTarget.value.length,
+          e.currentTarget.value.length
+        );
+        setHeight(`${e.currentTarget.scrollHeight}px`);
+      }}
+      onKeyDown={onKeyPress}
     ></textarea>
   );
 };
