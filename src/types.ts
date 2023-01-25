@@ -1,5 +1,3 @@
-// export type bodyC = Record<string, Omit<ICardBody, "id">>;
-
 export interface ICardBody {
   id: string;
   title: string;
