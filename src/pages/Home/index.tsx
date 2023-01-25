@@ -58,7 +58,11 @@ export const HomePage: React.FC = () => {
               handleModal.current = setIsOpen;
             }}
           >
-            <CreateCardForm onSubmit={onSubmitFormHandler} />
+            <CreateCardForm
+              onSubmit={onSubmitFormHandler}
+              autoFocus
+              inputOption="input"
+            />
           </Modal>
         </>
       )}
