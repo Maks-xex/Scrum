@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 
+import { useQueryClient } from "react-query";
+
+import { createCardBody } from "../../../api/create-card-body";
+
 import { Button } from "../../Button/Button";
 import { InputFile } from "../../InputFile/InputFile";
 import { CreateCardForm, Inputs } from "../../CreateCardForm/CreateCardForm";
@@ -8,8 +12,6 @@ import { storage, writeImageUrl } from "../../../store/firebase-store";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 import classes from "./card-footer.module.scss";
-import { useQueryClient } from "react-query";
-import { createCardBody } from "../../../api/create-card-body";
 
 interface CardFooterProps {
   id: string;
@@ -54,6 +56,8 @@ export const CardFooter: React.FC<CardFooterProps> = ({ id }) => {
           addButton={false}
           className="absolute p-0 rounded"
           onSubmit={createCardBodyHandler}
+          inputOption="input"
+          autoFocus
         />
       )}
       <InputFile

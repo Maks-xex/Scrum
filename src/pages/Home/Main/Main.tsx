@@ -5,7 +5,7 @@ import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
 
 import { reorder } from "../../../utils/reorder";
 
-import { updateCardBody } from "../../../api/update-card-body";
+import { updateCard } from "../../../api/update-card";
 
 import { Card } from "../../../components/Card/Card";
 import { StrictModeDroppable } from "../../../components/StrictModeDroppable/StrictModeDroppable";
@@ -80,7 +80,7 @@ export const Main: React.FC<MainProps> = ({ cards, setCards, children }) => {
       }
     }
     setCards(newState);
-    void updateCardBody(newState);
+    void updateCard(newState);
   };
 
   const renderCards = (): JSX.Element => (

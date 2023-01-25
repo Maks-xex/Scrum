@@ -1,7 +1,8 @@
 import React from "react";
 
-import { ICardBody } from "../../../types";
 import { Draggable } from "react-beautiful-dnd";
+
+import { ICardBody } from "../../../types";
 
 interface CardBodyProps {
   body?: ICardBody[];
