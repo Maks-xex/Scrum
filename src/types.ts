@@ -4,6 +4,7 @@ export interface ICardBody {
   id: string;
   title: string;
   img?: string;
+  order: number;
 }
 
 export interface ICard {

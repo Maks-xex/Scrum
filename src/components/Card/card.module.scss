@@ -17,4 +17,14 @@ h3 {
   border: 1px black;
   border-radius: 1rem;
   max-width: 300px;
+  user-select: none;
+}
+
+.card__main {
+  display: flex;
+  background-color: #e0e0e0;
+
+  & li {
+    list-style-type: none;
+  }
 }

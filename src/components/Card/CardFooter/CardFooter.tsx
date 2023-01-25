@@ -63,7 +63,10 @@ export const CardFooter: React.FC<CardFooterProps> = ({ id }) => {
         accept="image/*"
         onChange={handleFile}
       >
-        <i className="fal fa-image text-[#4E4E4E] hover:text-[#2148d9] cursor-pointer"></i>
+        <i
+          className="fal fa-image text-[#4E4E4E] hover:text-[#2148d9] cursor-pointer"
+          tabIndex={0}
+        ></i>
       </InputFile>
     </div>
   );

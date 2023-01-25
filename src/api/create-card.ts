@@ -4,10 +4,10 @@ export interface CreateCardInput {
   title: string;
 }
 
-export const createCard = async (body: CreateCardInput): Promise<void> => {
+export const createCard = async (card: CreateCardInput): Promise<void> => {
   if (!DATABASE_URL) return;
   await fetch(`${DATABASE_URL}/cardList.json`, {
     method: "POST",
-    body: JSON.stringify(body),
+    body: JSON.stringify(card),
   });
 };

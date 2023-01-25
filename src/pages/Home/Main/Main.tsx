@@ -1,14 +1,16 @@
 import React from "react";
 
+import ScrollContainer from "react-indiana-drag-scroll";
 import { DragDropContext, Draggable, DropResult } from "react-beautiful-dnd";
+
+import { reorder } from "../../../utils/reorder";
+
+import { updateCardBody } from "../../../api/update-card-body";
 
 import { Card } from "../../../components/Card/Card";
 import { StrictModeDroppable } from "../../../components/StrictModeDroppable/StrictModeDroppable";
 
-import { ICard } from "../../../types";
-import ScrollContainer from "react-indiana-drag-scroll";
-import { reorder } from "../../../utils/reorder";
-import { updateCard } from "../../../api/update-card";
+import { ICard, ICardBody } from "../../../types";
 
 interface MainProps {
   cards: ICard[];
@@ -18,20 +20,67 @@ interface MainProps {
 
 export const Main: React.FC<MainProps> = ({ cards, setCards, children }) => {
   const onDragEnd = (result: DropResult): void => {
-    if (!result.destination) {
+    const { destination, source, type } = result;
+
+    if (!destination) {
       return;
     }
 
-    if (result.destination.index === result.source.index) {
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
       return;
     }
-    const card = reorder<ICard>(
-      cards,
-      result.source.index,
-      result.destination.index
-    ).map((card, i) => ({ ...card, order: i }));
-    setCards(card);
-    void updateCard(card);
+    const home = cards.find((card) => card.id === source.droppableId);
+    const foreign = cards.find((card) => card.id === destination.droppableId);
+    let newState: ICard[] = [];
+
+    if (type === "column") {
+      const card = reorder<ICard>(cards, source.index, destination.index).map(
+        (card, i) => ({ ...card, order: i })
+      );
+      newState = card;
+    }
+    // move to the same card
+    if (home === foreign && home?.body) {
+      const cardBody = reorder<ICardBody>(
+        home?.body,
+        source.index,
+        destination.index
+      ).map((card, i) => ({ ...card, order: i }));
+      newState = cards.map((card) => {
+        if (card.id === source.droppableId) {
+          card.body = cardBody;
+        }
+        return card;
+      });
+    }
+    // move from one to another card
+    if (type === "cardBody" && home?.body) {
+      const homeBody = Array.from(home?.body);
+      const [removed] = homeBody.splice(source.index, 1);
+
+      if (!foreign?.body && foreign) {
+        foreign.body = [];
+      }
+      if (foreign?.body && home !== foreign) {
+        const foreignBody = Array.from(foreign.body);
+        foreignBody.splice(destination.index, 0, removed);
+
+        newState = cards.map((card) => {
+          if (card.id === source.droppableId) {
+            card.body = homeBody.map((card, i) => ({ ...card, order: i }));
+          }
+          if (card.id === destination.droppableId) {
+            card.body = foreignBody.map((card, i) => ({ ...card, order: i }));
+          }
+          return card;
+        });
+      }
+    }
+    setCards(newState);
+    void updateCardBody(newState);
   };
 
   const renderCards = (): JSX.Element => (
@@ -44,8 +93,8 @@ export const Main: React.FC<MainProps> = ({ cards, setCards, children }) => {
               <div
                 className="h-fit"
                 ref={provide.innerRef}
-                {...provide.dragHandleProps}
                 {...provide.draggableProps}
+                {...provide.dragHandleProps}
               >
                 <Card title={card.title} id={card.id} body={card.body} />
               </div>
@@ -62,7 +111,11 @@ export const Main: React.FC<MainProps> = ({ cards, setCards, children }) => {
         ignoreElements="div[role=button]"
       >
         <DragDropContext onDragEnd={onDragEnd}>
-          <StrictModeDroppable droppableId="cardList" direction="horizontal">
+          <StrictModeDroppable
+            type="column"
+            droppableId="cardList"
+            direction="horizontal"
+          >
             {(provided) => (
               <div
                 ref={provided.innerRef}

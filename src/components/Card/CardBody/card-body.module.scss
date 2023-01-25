@@ -1,8 +1,5 @@
-.card__main {
-  display: flex;
-  background-color: #e0e0e0;
-
-  & li:not(:first-child) {
-    padding-top: 5px;
+.card__body {
+  li:not(:first-child) {
+    margin-top: 5px;
   }
 }

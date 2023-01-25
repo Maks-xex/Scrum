@@ -5,6 +5,8 @@ import { useQuery, useQueryClient } from "react-query";
 import { getCards } from "../../api/get-cards";
 import { createCard } from "../../api/create-card";
 
+import { Main } from "./Main/Main";
+
 import { Button } from "../../components/Button/Button";
 import { Loader } from "../../components/Loader/Loader";
 import { Handlers, Modal } from "../../components/Modal/Modal";
@@ -12,8 +14,6 @@ import {
   CreateCardForm,
   Inputs,
 } from "../../components/CreateCardForm/CreateCardForm";
-
-import { Main } from "./Main/Main";
 
 import { ICard } from "../../types";
 
