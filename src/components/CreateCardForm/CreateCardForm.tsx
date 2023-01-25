@@ -4,8 +4,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 
 import { Button } from "../Button/Button";
 
-import { ICardBody } from "../../types";
-
 import classes from "./create-card-form.module.scss";
 
 interface CreateCardFormProps {
@@ -16,8 +14,7 @@ interface CreateCardFormProps {
 
 export interface Inputs {
   title: string;
-  body: ICardBody;
-  img?: string;
+  body: { title: string };
 }
 
 export const CreateCardForm: React.FC<CreateCardFormProps> = ({
