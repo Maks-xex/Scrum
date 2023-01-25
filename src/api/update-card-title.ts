@@ -1,9 +1,8 @@
 import { DATABASE_URL } from "../store/firebase-store";
-
-import { Inputs } from "../components/CreateCardForm/CreateCardForm";
+import { ICard } from "../types";
 
 export const updateCardTitle = async (
-  data: Inputs,
+  data: Omit<ICard, "id" | "order">,
   id: string
 ): Promise<void> => {
   if (!DATABASE_URL) return;

@@ -10,13 +10,15 @@ import { ContextMenu } from "../../ContextMenu/ContextMenu";
 import { CreateCardForm, Inputs } from "../../CreateCardForm/CreateCardForm";
 
 import classes from "./card-header.module.scss";
+import { ICardBody } from "../../../types";
 
 interface CardHeaderProps {
   title: string;
+  body?: ICardBody[];
   id: string;
 }
 
-export const CardHeader: React.FC<CardHeaderProps> = ({ title, id }) => {
+export const CardHeader: React.FC<CardHeaderProps> = ({ title, id, body }) => {
   const [showTextArea, setShowTextArea] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const btnRef = useRef(null);
@@ -45,7 +47,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({ title, id }) => {
 
   const onSubmitFormHandler = async (data: Inputs): Promise<void> => {
     setShowTextArea(false);
-    await updateCardTitle(data, id);
+    await updateCardTitle({ ...data, body }, id);
     void queryClient.invalidateQueries("cards");
   };
 

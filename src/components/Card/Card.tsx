@@ -18,7 +18,7 @@ interface CardListProps {
 export const Card: React.FC<CardListProps> = ({ title, body, id }) => {
   return (
     <div className={classes.card}>
-      <CardHeader title={title} id={id} />
+      <CardHeader title={title} id={id} body={body} />
       <StrictModeDroppable droppableId={id} type="cardBody">
         {(provided) => (
           <div
