@@ -1,7 +1,8 @@
 import { DATABASE_URL } from "../store/firebase-store";
+
 import { ICard } from "../types";
 
-export const updateCardBody = async (data: ICard[]): Promise<void> => {
+export const updateCard = async (data: ICard[]): Promise<void> => {
   const obj = Object.fromEntries(
     data.map((card) => {
       let body;
