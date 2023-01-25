@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { TextArea } from "../../TextArea/TextArea";
+import { useQueryClient } from "react-query";
+
+import { deleteCard } from "../../../api/delete-card";
+import { updateCardTitle } from "../../../api/update-card-title";
+
 import { Button } from "../../Button/Button";
 import { ContextMenu } from "../../ContextMenu/ContextMenu";
+import { CreateCardForm, Inputs } from "../../CreateCardForm/CreateCardForm";
 
 import classes from "./card-header.module.scss";
-import { deleteCard } from "../../../api/delete-card";
-import { useQueryClient } from "react-query";
 
 interface CardHeaderProps {
   title: string;
@@ -14,6 +17,7 @@ interface CardHeaderProps {
 }
 
 export const CardHeader: React.FC<CardHeaderProps> = ({ title, id }) => {
+  const [showTextArea, setShowTextArea] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const btnRef = useRef(null);
   const liRef = useRef(null);
@@ -35,10 +39,33 @@ export const CardHeader: React.FC<CardHeaderProps> = ({ title, id }) => {
     };
   }, []);
 
+  const onClickTitleHandler = (): void => {
+    setShowTextArea(true);
+  };
+
+  const onSubmitFormHandler = async (data: Inputs): Promise<void> => {
+    setShowTextArea(false);
+    await updateCardTitle(data, id);
+    void queryClient.invalidateQueries("cards");
+  };
+
   return (
     <div className={classes.card__header}>
-      <h2 className="hidden">{title}</h2>
-      <TextArea defaultValue={title} className={classes.card__title} autoSize />
+      {!showTextArea ? (
+        <h2 className={classes.card__title} onClick={onClickTitleHandler}>
+          {title}
+        </h2>
+      ) : (
+        <CreateCardForm
+          inputOption="textarea"
+          autoSize
+          addButton={false}
+          className={"p-0 overflow-hidden bg-transparent"}
+          classNameInput={classes.card__title}
+          onSubmit={onSubmitFormHandler}
+          defaultValue={title}
+        />
+      )}
       <Button
         className={classes.card__configButon}
         onClick={() => setIsOpen((prev) => !prev)}

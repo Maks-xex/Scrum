@@ -23,9 +23,10 @@
 .card__configButon {
   display: grid;
   align-self: start;
-  place-items: self-end;
+  place-items: center;
   align-items: center;
   margin-top: 12px;
+  margin-left: 2px;
   z-index: 1;
   gap: 0;
   width: 1rem;
@@ -39,7 +40,7 @@
     box-shadow: inset 0 0 2px;
     padding: 3px 12px;
     width: 20px;
-    margin: 7.5px -9px 0 0;
+    margin: 7.5px -6px 0 0;
     justify-content: center;
   }
 
