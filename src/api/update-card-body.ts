@@ -3,14 +3,14 @@ import { ICard } from "../types";
 
 export const updateCardBody = async (data: ICard[]): Promise<void> => {
   const obj = Object.fromEntries(
-    data.map((card, i) => {
+    data.map((card) => {
       let body;
       if (card.body) {
         body = {
           ...Object.fromEntries(
-            card.body.map((body, i) => [
+            card.body.map((body) => [
               body.id,
-              { img: body.img, title: body.title },
+              { img: body.img, title: body.title, order: body.order },
             ])
           ),
         };
@@ -20,6 +20,7 @@ export const updateCardBody = async (data: ICard[]): Promise<void> => {
         {
           title: card.title,
           body,
+          order: card.order,
         },
       ];
     })
