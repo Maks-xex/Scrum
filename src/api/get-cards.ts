@@ -7,6 +7,9 @@ type CardBody = Record<string, Omit<ICardBody, "id">>;
 export const getCards = async (): Promise<ICard[]> => {
   if (!DATABASE_URL) return [];
   const response = await fetch(`${DATABASE_URL}/cardList.json`);
+  if (!response.ok) {
+    throw new Error(`${response.status}`);
+  }
   const data = (await response.json()) as Response;
   return (
     data &&

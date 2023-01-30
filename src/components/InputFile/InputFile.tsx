@@ -18,20 +18,18 @@ export const InputFile: React.FC<InputProps> = ({
   onChange,
   accept,
   children,
-}) => {
-  return (
-    <>
-      <label htmlFor={`image-${id}`} className={classNameLabel}>
-        {children}
-      </label>
-      <input
-        type="file"
-        id={`image-${id}`}
-        name={name}
-        accept={accept}
-        className={classNameInput}
-        onChange={onChange}
-      />
-    </>
-  );
-};
+}) => (
+  <>
+    <label htmlFor={`image-${id}`} className={classNameLabel}>
+      {children}
+    </label>
+    <input
+      type="file"
+      id={`image-${id}`}
+      name={name}
+      accept={accept}
+      className={classNameInput}
+      onChange={onChange}
+    />
+  </>
+);
