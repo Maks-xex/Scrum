@@ -2,7 +2,7 @@ import { DATABASE_URL } from "../store/firebase-store";
 import { ICard } from "../types";
 
 export const updateCardTitle = async (
-  data: Omit<ICard, "id" | "order">,
+  data: Omit<ICard, "id">,
   id: string
 ): Promise<void> => {
   if (data.body)

@@ -16,9 +16,15 @@ interface CardHeaderProps {
   title: string;
   body?: ICardBody[];
   id: string;
+  order: number;
 }
 
-export const CardHeader: React.FC<CardHeaderProps> = ({ title, id, body }) => {
+export const CardHeader: React.FC<CardHeaderProps> = ({
+  title,
+  id,
+  body,
+  order,
+}) => {
   const [showTextArea, setShowTextArea] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const btnRef = useRef(null);
@@ -47,7 +53,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({ title, id, body }) => {
 
   const onSubmitFormHandler = async (data: Inputs): Promise<void> => {
     setShowTextArea(false);
-    await updateCardTitle({ ...data, body }, id);
+    await updateCardTitle({ ...data, body, order }, id);
     void queryClient.invalidateQueries("cards");
   };
 

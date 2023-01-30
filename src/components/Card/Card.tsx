@@ -13,12 +13,13 @@ interface CardListProps {
   title: string;
   body?: ICardBody[];
   id: string;
+  order: number;
 }
 
-export const Card: React.FC<CardListProps> = ({ title, body, id }) => {
+export const Card: React.FC<CardListProps> = ({ title, body, id, order }) => {
   return (
     <div className={classes.card}>
-      <CardHeader title={title} id={id} body={body} />
+      <CardHeader title={title} id={id} body={body} order={order} />
       <StrictModeDroppable droppableId={id} type="cardBody">
         {(provided) => (
           <div
