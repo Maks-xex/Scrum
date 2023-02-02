@@ -13,7 +13,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         type={type ?? "button"}
-        className={`${classes.button} ${className ?? ""}`}
+        className={`${className ?? ""} ${classes.button}`}
         onClick={onClick}
         ref={ref}
       >

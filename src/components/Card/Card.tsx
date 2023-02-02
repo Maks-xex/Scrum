@@ -27,7 +27,7 @@ export const Card: React.FC<CardListProps> = ({ title, body, id, order }) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            <CardBody body={body} />
+            <CardBody body={body} id={id} />
             {provided.placeholder}
           </div>
         )}
